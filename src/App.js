@@ -58,6 +58,9 @@ class App extends React.Component {
 				counter++;
 				let l = this.getRandomInt(2, 40);
 				let r = this.getRandomInt(2, 20);
+				if (l === r) {
+					continue;
+				}
 				if (l / r === Math.floor(l / r)) {
 					return { id: id, left: l, right: r, operation: 'divide' };
 				}
@@ -87,21 +90,26 @@ class App extends React.Component {
 			this.setState({
 				generatedOperations: []
 			});
-			this.forceUpdate();
-			let options = [];
-			const howManyOperations = parseInt(this.state.howManyOperations);
-			for(let i = 0; i < howManyOperations; i++) {
-				id++;
-				options.push(this.generateEntityForMultiply(id));
-			}
-			for(let i = 0; i < howManyOperations; i++) {
-				id++;
-				options.push(this.generateEntityForDivide(id));
-			}
+			setTimeout(() => {
+				let options = [];
+				let howManyOperations = parseInt(this.state.howManyOperations);
+				if (howManyOperations > 100) {
+					howManyOperations = 100;
+				}
+				for(let i = 0; i < howManyOperations; i++) {
+					id++;
+					options.push(this.generateEntityForMultiply(id));
+				}
+				for(let i = 0; i < howManyOperations; i++) {
+					id++;
+					options.push(this.generateEntityForDivide(id));
+				}
 
-			this.setState({
-				generatedOperations: options
-			});
+				this.setState({
+					generatedOperations: options
+				});
+			}, 100);
+			
 		} catch(e) {
 			this.setState({
 				generatedOperations: []
