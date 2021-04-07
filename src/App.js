@@ -6,7 +6,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			howManyOperations: '',
+			howManyOperations: '10',
 			upperLimit: '50',
 			doMultiply: true,
 			doDivide: true,
@@ -42,9 +42,9 @@ class App extends React.Component {
 		max = Math.floor(max);
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
-	generateEntityForMultiply(id) {
+	generateEntityForMultiply(id, upperLimit) {
 		try {
-			const upperLimit = parseInt(this.state.upperLimit);
+			
 			let counter = 0;
 			while (true) {
 				counter++;
@@ -73,9 +73,8 @@ class App extends React.Component {
 		}
 		
 	}
-	generateEntityForDivide(id) {
+	generateEntityForDivide(id, upperLimit) {
 		try {
-			const upperLimit = parseInt(this.state.upperLimit);
 			let counter = 0;
 			while (true) {
 				counter++;
@@ -115,6 +114,7 @@ class App extends React.Component {
 			});
 			setTimeout(() => {
 				let options = [];
+				const upperLimit = parseInt(this.state.upperLimit);
 				let howManyOperations = parseInt(this.state.howManyOperations);
 				if (howManyOperations > 100) {
 					howManyOperations = 100;
@@ -122,13 +122,13 @@ class App extends React.Component {
 				if(this.state.doMultiply) {
 					for(let i = 0; i < howManyOperations; i++) {
 						id++;
-						options.push(this.generateEntityForMultiply(id));
+						options.push(this.generateEntityForMultiply(id, upperLimit));
 					}
 				}
 				if(this.state.doDivide) {
 					for(let i = 0; i < howManyOperations; i++) {
 						id++;
-						options.push(this.generateEntityForDivide(id));
+						options.push(this.generateEntityForDivide(id, upperLimit));
 					}
 				}
 				this.setState({
@@ -148,14 +148,16 @@ class App extends React.Component {
 				<div className="MainContent">
 					<div>Dzielenie/Mnożenie</div>
 					<div>
-						<label htmlFor='howManyOperations'>Ile działań ? </label> <input onChange={this.handleOperationCountChange.bind(this)} id='howManyOperations' type='text' />
+						<label htmlFor='howManyOperations'>Ile działań ? </label> <input onChange={this.handleOperationCountChange.bind(this)} value={this.state.howManyOperations} id='howManyOperations' type='text' />
+						<br />
 						<label htmlFor='upperLimit'>Do</label> <input  onChange={this.handleUpperLimitChange.bind(this)} value={this.state.upperLimit} id='upperLimit' type='text' />
 					</div>
 					<div>
 						<label htmlFor='doMultiply'>Generuj mnożenie</label> <input id='doMultiply' onChange={this.handleDoMultiplyChange.bind(this)} checked={this.state.doMultiply} type='checkbox' />
+						<br />
 						<label htmlFor='doDivide'> Generuj dzielenie</label> <input id='doDivide' onChange={this.handleDoDivideChange.bind(this)} checked={this.state.doDivide} type='checkbox' />
 					</div>
-					<div style={{'padding-top': '15px'}}>
+					<div style={{'paddingTop': '15px'}}>
 						<button id='endCheck' onClick={this.generateOperations.bind(this)}>Rozpocznij od nowa</button>
 					</div>
 					{
